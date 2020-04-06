@@ -1,0 +1,47 @@
+# OSX
+.DS_Store
+
+# Java
+client/target/**
+*.jar
+*.war
+*.ear
+*.class
+*.log
+
+# Eclipse
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+**/.classpath
+**/.settings/
+.loadpath
+
+# Intellij
+.idea/workspace.xml
+.idea/encodings.xml
+.idea/uiDesigner.xml
+.idea/inspectionProfiles/Project_Default.xml
+*.iml
+
+# User-specific stuff
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+
+# Saved Login Details
+client/src/main/resources/application/model/userLoggedIn.txt
