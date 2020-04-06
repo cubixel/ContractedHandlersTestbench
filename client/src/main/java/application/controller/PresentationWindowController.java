@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 public class PresentationWindowController extends BaseController implements Initializable {
@@ -44,6 +46,7 @@ public class PresentationWindowController extends BaseController implements Init
   
   TimingManager timingManager;
   
+  // private static final Logger log = LoggerFactory.getLogger("Client Logger");
 
   public PresentationWindowController(ViewFactory viewFactory, String fxmlName) {
     super(viewFactory, fxmlName);

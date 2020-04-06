@@ -25,9 +25,6 @@ public abstract class BaseController {
    *
    * @param fxmlName
    *        The FXML file that describes a window the controller contains the logic for.
-   *        
-   * @param mainConnection
-   *        This is the main connection to the server, established on startup.
    */
   public BaseController(ViewFactory viewFactory, String fxmlName) {
     this.viewFactory = viewFactory;

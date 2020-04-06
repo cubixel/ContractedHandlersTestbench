@@ -9,6 +9,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -20,6 +22,8 @@ import org.w3c.dom.NodeList;
  *
  */
 public class TextHandler {
+
+  //private static final Logger log = LoggerFactory.getLogger("Client Logger");
 
   private StackPane pane;
   private Map<String, TextFlow> texts = new HashMap<>();

@@ -6,6 +6,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 /**
  * Module to play video files onto a StackPlane by adding extra MediaView.
@@ -15,6 +17,7 @@ import javafx.scene.media.MediaView;
  *
  */
 public class VideoHandler {
+  // private static final Logger log = LoggerFactory.getLogger("Client Logger");
 
   private StackPane pane;
   private Map<String, MediaView> videos = new HashMap<>();
