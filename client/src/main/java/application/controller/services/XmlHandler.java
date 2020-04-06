@@ -63,7 +63,6 @@ public class XmlHandler {
     if (path.endsWith(".xml")) {
       return true;
     } else {
-      // TODO Make proper error message
       log.error("Input File '" + path + "' is not of type .xml");
       return false;
     }
@@ -73,7 +72,6 @@ public class XmlHandler {
     if (file.exists()) {
       return true;
     } else {
-      // TODO Make proper error message
       log.error("Input file '" + file.getAbsolutePath() + "' does not exist");
       file = null;
       return false;
@@ -87,13 +85,10 @@ public class XmlHandler {
       doc = docBuilder.parse(file);
       doc.getDocumentElement().normalize();
     } catch (ParserConfigurationException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (SAXException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

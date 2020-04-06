@@ -435,4 +435,3 @@ public class TimingManager extends Thread {
     this.presentation = presentation;
   }
 }
-//TODO make stuff private, remove getters + setters

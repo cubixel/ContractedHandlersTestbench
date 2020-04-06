@@ -754,7 +754,7 @@ public class ElementValidations {
     //define potential extensions
     ArrayList<String> extensions = new ArrayList<String>();
     extensions.add(".vlc"); 
-    extensions.add(".m3u8");//TODO more extensions?
+    extensions.add(".m3u8");
 
     // urlname has to exist and be valid
     if (!validateUrlAttribute(attributes, "urlname", true, extensions)) {
