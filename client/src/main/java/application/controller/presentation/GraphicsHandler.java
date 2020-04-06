@@ -49,5 +49,5 @@ public class GraphicsHandler {
 
   public void deregisterGraphic(String id) {
     log.warn("Method not implemented");
-  }  
+  }
 }

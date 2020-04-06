@@ -1,5 +1,7 @@
 package application.controller;
 
+import application.controller.presentation.AudioHandler;
+import application.controller.presentation.GraphicsHandler;
 import application.controller.presentation.ImageHandler;
 import application.controller.presentation.PresentationObject;
 import application.controller.presentation.TextHandler;
@@ -68,9 +70,11 @@ public class PresentationWindowController extends BaseController implements Init
           presentation.getDfFontSize(), presentation.getDfFontColor());
       ImageHandler imageHandler = new ImageHandler(pane);
       VideoHandler videoHandler = new VideoHandler(pane);
+      AudioHandler audioHandler = new AudioHandler();
+      GraphicsHandler graphicsHandler = new GraphicsHandler(pane);
       if (presentation.getValid()) {
         timingManager = new TimingManager(presentation, pane, textHandler, imageHandler, 
-            videoHandler);
+            videoHandler, audioHandler, graphicsHandler);
         timingManager.start();
       } else {
         messageBox.setText("Invalid presentation.");

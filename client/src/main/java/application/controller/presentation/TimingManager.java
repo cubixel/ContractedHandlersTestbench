@@ -36,6 +36,8 @@ public class TimingManager extends Thread {
   private TextHandler textHandler;
   private ImageHandler imageHandler;
   private VideoHandler videoHandler;
+  private AudioHandler audioHandler;
+  private GraphicsHandler graphicsHandler;
   //private GraphicsHandler graphicsHandler;
   //private AudioHandler audioHandler;
 
@@ -43,14 +45,16 @@ public class TimingManager extends Thread {
    * METHOD DESCRIPTION.
    */
   public TimingManager(PresentationObject presentation, StackPane pane, TextHandler textHandler, 
-      ImageHandler imageHandler, VideoHandler videoHandler) {
+      ImageHandler imageHandler, VideoHandler videoHandler, AudioHandler audioHandler,
+      GraphicsHandler graphicsHandler) {
     setDaemon(true);
     this.presentation = presentation;
     this.textHandler = textHandler;
     this.imageHandler = imageHandler;
     this.videoHandler = videoHandler;
-    //graphicsHandler = new GraphicsHandler(pane, , );
-    //audioHandler = new AudioHandler();
+    this.audioHandler = audioHandler;
+    this.graphicsHandler = graphicsHandler;
+
     List<PresentationSlide> slidesList = presentation.getSlidesList();
     PresentationSlide slide;
     List<Node> elements;
@@ -80,18 +84,90 @@ public class TimingManager extends Thread {
             log.info("Text element made at ID " + tempId);
             break; 
           case "line":
+            graphicsHandler.registerLine(
+                Float.parseFloat(attributes.getNamedItem("xstart").getTextContent()),
+                Float.parseFloat(attributes.getNamedItem("xend").getTextContent()),
+                Float.parseFloat(attributes.getNamedItem("ystart").getTextContent()),
+                Float.parseFloat(attributes.getNamedItem("yend").getTextContent()),
+                attributes.getNamedItem("linecolor").getTextContent(),
+                tempId);
             addElement(elementName, slideId, elementId, 
                 attributes.getNamedItem("starttime").getNodeValue(), 
                 attributes.getNamedItem("endtime").getNodeValue());
             log.info("Line element made at ID " + tempId);
             break; 
           case "shape":
+            // Check if rectangle or oval
+            if (attributes.getNamedItem("type").getTextContent().equals("rectangle")) {
+              //Check for shading
+              if (element.getChildNodes().getLength() > 0) {
+                // Shading version
+                NamedNodeMap shading = element.getChildNodes().item(1).getAttributes();
+                graphicsHandler.registerRectangle(
+                    Float.parseFloat(attributes.getNamedItem("xstart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("ystart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("width").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("height").getTextContent()),
+                    tempId,
+                    Float.parseFloat(shading.getNamedItem("x1").getTextContent()),
+                    Float.parseFloat(shading.getNamedItem("y1").getTextContent()),
+                    shading.getNamedItem("color1").getTextContent(),
+                    Float.parseFloat(shading.getNamedItem("x2").getTextContent()),
+                    Float.parseFloat(shading.getNamedItem("y2").getTextContent()),
+                    shading.getNamedItem("color2").getTextContent(),
+                    Boolean.parseBoolean(shading.getNamedItem("cyclic").getTextContent()));
+              } else {
+                // No shading version
+                graphicsHandler.registerRectangle(
+                    Float.parseFloat(attributes.getNamedItem("xstart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("ystart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("width").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("height").getTextContent()),
+                    attributes.getNamedItem("fillcolor").getTextContent(),
+                    tempId);
+              }
+            } else if (attributes.getNamedItem("type").getTextContent().equals("oval")) {
+              //Check for shading
+              if (element.getChildNodes().getLength() > 0) {
+                // Shading version
+                NamedNodeMap shading = element.getChildNodes().item(1).getAttributes();
+                graphicsHandler.registerOval(
+                    Float.parseFloat(attributes.getNamedItem("xstart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("ystart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("width").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("height").getTextContent()),
+                    tempId,
+                    Float.parseFloat(shading.getNamedItem("x1").getTextContent()),
+                    Float.parseFloat(shading.getNamedItem("y1").getTextContent()),
+                    shading.getNamedItem("color1").getTextContent(),
+                    Float.parseFloat(shading.getNamedItem("x2").getTextContent()),
+                    Float.parseFloat(shading.getNamedItem("y2").getTextContent()),
+                    shading.getNamedItem("color2").getTextContent(),
+                    Boolean.parseBoolean(shading.getNamedItem("cyclic").getTextContent()));
+              } else {
+                // No shading version
+                graphicsHandler.registerOval(
+                    Float.parseFloat(attributes.getNamedItem("xstart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("ystart").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("width").getTextContent()),
+                    Float.parseFloat(attributes.getNamedItem("height").getTextContent()),
+                    attributes.getNamedItem("fillcolor").getTextContent(),
+                    tempId);
+              }
+            } else {
+              log.error("Shape was not oval or rectangle");
+              break;
+            }
             addElement(elementName, slideId, elementId, 
                 attributes.getNamedItem("starttime").getNodeValue(), 
                 attributes.getNamedItem("endtime").getNodeValue());
             log.info("Shape element made at ID " + tempId);
             break;
           case "audio":
+            audioHandler.registerAudio(
+                attributes.getNamedItem("urlname").getTextContent(),
+                Boolean.parseBoolean(attributes.getNamedItem("loop").getTextContent()),
+                tempId);
             addElement(elementName, slideId, elementId, 
                 attributes.getNamedItem("starttime").getNodeValue());
             log.info("Audio element made at ID " + tempId);
@@ -296,13 +372,19 @@ public class TimingManager extends Thread {
         });
         break; 
       case "line":
-
+        Platform.runLater(() -> {
+          graphicsHandler.drawGraphic(element.getId());
+        });
         break; 
       case "shape":
-
+        Platform.runLater(() -> {
+          graphicsHandler.drawGraphic(element.getId());
+        });
         break;
       case "audio":
-
+        Platform.runLater(() -> {
+          audioHandler.startAudio(element.getId());
+        });
         break; 
       case "image":
         Platform.runLater(() -> {
@@ -330,13 +412,19 @@ public class TimingManager extends Thread {
         });
         break; 
       case "line":
-
+        Platform.runLater(() -> {
+          graphicsHandler.undrawGraphic(element.getId());
+        });
         break; 
       case "shape":
-
+        Platform.runLater(() -> {
+          graphicsHandler.undrawGraphic(element.getId());
+        });
         break;
       case "audio":
-
+        Platform.runLater(() -> {
+          audioHandler.stopAudio(element.getId());
+        });
         break; 
       case "image":
         Platform.runLater(() -> {
